@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SKC – Bookkeeping Do's &amp; Don'ts</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f0c29;font-family:Georgia,serif}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+@keyframes pop{0%{transform:scale(0.92);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.fade{animation:fadeUp 0.4s ease both}
+.shake{animation:shake 0.4s ease}
+.pop{animation:pop 0.3s ease}
+button{font-family:Georgia,serif;cursor:pointer;border:none}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef}=React;
+const LOGO="data:image/png;base64,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";
+const TIMER=20;
+const questions=[
+  {biz:"💇‍♀️ Salon",expense:"Hair dye, shampoo & styling products for clients",correct:"good",why:"Products used directly on paying clients are a legitimate business expense — they help you deliver your service."},
+  {biz:"💇‍♀️ Salon",expense:"Owner's personal manicure & hair treatment",correct:"bad",why:"Personal grooming for the owner is NOT a business expense — even working in a salon. CRA considers this personal."},
+  {biz:"💇‍♀️ Salon",expense:"Salon chairs, mirrors & wash stations",correct:"good",why:"Equipment used to serve clients is a capital asset — it belongs in your books and can be depreciated over time."},
+  {biz:"💇‍♀️ Salon",expense:"Designer handbag purchased at the mall",correct:"bad",why:"A personal fashion purchase has no business purpose. CRA will flag this as personal immediately."},
+  {biz:"🍽️ Restaurant",expense:"Food ingredients & cooking supplies for the menu",correct:"good",why:"Ingredients for meals served to customers are your Cost of Goods Sold — a core, fully deductible business expense."},
+  {biz:"🍽️ Restaurant",expense:"Family vacation to Cuba labelled a 'business trip'",correct:"bad",why:"A personal family vacation is never a business expense. Travel must have a clear, documented business purpose."},
+  {biz:"🍽️ Restaurant",expense:"Commercial fridge, stove & kitchen equipment",correct:"good",why:"Commercial kitchen equipment is a business asset — capitalize and depreciate it over its useful life."},
+  {biz:"🍽️ Restaurant",expense:"Personal home groceries labelled 'restaurant supplies'",correct:"bad",why:"Groceries for personal home consumption are NEVER deductible — even if you own a restaurant."},
+  {biz:"🛍️ Retail Boutique",expense:"Inventory purchased to sell in the store",correct:"good",why:"Products bought to resell are inventory — tracked as Cost of Goods Sold when sold. This is the #1 legitimate retail expense."},
+  {biz:"🛍️ Retail Boutique",expense:"Owner's personal clothing claimed as 'store samples'",correct:"bad",why:"Personal clothing is not deductible. CRA only allows clothing deductions for uniforms or protective gear not suitable for everyday wear."},
+  {biz:"🛍️ Retail Boutique",expense:"Point-of-sale system & receipt printer",correct:"good",why:"Technology used to operate your business is a legitimate expense. Software is expensed; hardware is capitalized."},
+  {biz:"🛍️ Retail Boutique",expense:"Jewelry purchased to 'inspire the store's collection'",correct:"bad",why:"Personal jewelry has no direct business use. You cannot claim personal purchases as inspiration — CRA won't accept it."},
+  {biz:"🏠 Home-Based Business",expense:"Portion of home internet used for business",correct:"good",why:"If you use the internet for business, you can deduct the business-use percentage. Keep a log of personal vs business use."},
+  {biz:"🏠 Home-Based Business",expense:"New 75-inch TV for the 'client meeting room'",correct:"bad",why:"A large TV in a dual-use room is personal. To claim home expenses, the space must be used EXCLUSIVELY for business."},
+  {biz:"🏠 Home-Based Business",expense:"Desk, office chair & printer used only for work",correct:"good",why:"Furniture and equipment used exclusively for your home business are fully deductible as business expenses."},
+  {biz:"🔨 Contractor/Trades",expense:"Work boots, hard hat & safety gear",correct:"good",why:"Safety equipment required for your job is fully deductible — it is not everyday wear and has a clear business purpose."},
+  {biz:"🔨 Contractor/Trades",expense:"Speeding tickets on the way to job sites",correct:"bad",why:"Fines and penalties — including traffic tickets — are NEVER deductible under CRA rules, no matter where you were going."},
+  {biz:"🔨 Contractor/Trades",expense:"Tools & equipment used on client job sites",correct:"good",why:"Tools used to perform your trade are deductible. Smaller tools are expensed; larger equipment should be capitalized."},
+  {biz:"📊 Bookkeeping / Consulting",expense:"Accounting software subscription (e.g. QuickBooks)",correct:"good",why:"Software you use to run your business or serve clients is fully deductible as a business operating expense."},
+  {biz:"📊 Bookkeeping / Consulting",expense:"Personal Netflix labelled 'industry research'",correct:"bad",why:"Personal entertainment subscriptions are not deductible — even if you occasionally watch business-related content on them."},
+];
+
+function App(){
+  const [screen,setScreen]=useState("intro");
+  const [qi,setQi]=useState(0);
+  const [score,setScore]=useState(0);
+  const [lives,setLives]=useState(3);
+  const [choice,setChoice]=useState(null);
+  const [timeLeft,setTimeLeft]=useState(TIMER);
+  const [paused,setPaused]=useState(false);
+  const [timerOn,setTimerOn]=useState(true);
+  const [shake,setShake]=useState(false);
+  const [log,setLog]=useState([]);
+  const timerRef=useRef(null);
+  const pRef=useRef(false);
+  const tRef=useRef(true);
+  useEffect(()=>{pRef.current=paused;},[paused]);
+  useEffect(()=>{tRef.current=timerOn;},[timerOn]);
+  useEffect(()=>{
+    if(screen!=="game"||choice!==null)return;
+    clearInterval(timerRef.current);
+    timerRef.current=setInterval(()=>{
+      if(pRef.current||!tRef.current)return;
+      setTimeLeft(t=>{
+        if(t<=1){clearInterval(timerRef.current);timeout();return 0;}
+        return t-1;
+      });
+    },1000);
+    return()=>clearInterval(timerRef.current);
+  },[screen,qi,choice]);
+
+  const timeout=()=>{
+    setChoice("timeout");
+    const nl=lives-1; setLives(nl);
+    setLog(l=>[...l,{q:questions[qi],chosen:"timeout",ok:false}]);
+    if(nl<=0)setTimeout(()=>setScreen("result"),1600);
+  };
+  const pick=(p)=>{
+    if(choice!==null||paused)return;
+    clearInterval(timerRef.current);
+    setChoice(p);
+    const ok=p===questions[qi].correct;
+    if(ok){setScore(s=>s+1);}
+    else{const nl=lives-1;setLives(nl);setShake(true);setTimeout(()=>setShake(false),400);if(nl<=0)setTimeout(()=>setScreen("result"),1600);}
+    setLog(l=>[...l,{q:questions[qi],chosen:p,ok}]);
+  };
+  const next=()=>{
+    if(qi+1>=questions.length){setScreen("result");return;}
+    setQi(i=>i+1);setChoice(null);setTimeLeft(TIMER);setPaused(false);
+  };
+  const restart=()=>{
+    setScreen("intro");setQi(0);setScore(0);setLives(3);
+    setChoice(null);setTimeLeft(TIMER);setPaused(false);setTimerOn(true);setLog([]);
+  };
+
+  const q=questions[qi];
+  const pct=Math.round((score/questions.length)*100);
+  const tc=timeLeft>12?"#00d97e":timeLeft>6?"#f5a623":"#e74c3c";
+  const hearts=[1,2,3].map(i=>i<=lives?"❤️":"🖤").join(" ");
+
+  if(screen==="intro")return(
+    <div className="fade" style={{minHeight:"100vh",background:"linear-gradient(150deg,#0f0c29,#302b63,#1a0f3c)",display:"flex",alignItems:"center",justifyContent:"center",padding:24}}>
+      <div style={{maxWidth:500,width:"100%",textAlign:"center"}}>
+        <img src={LOGO} alt="SKC" style={{width:100,marginBottom:16,filter:"drop-shadow(0 4px 14px rgba(100,200,255,0.35))"}}/> 
+        <h1 style={{color:"#fff",fontSize:"clamp(26px,5vw,38px)",marginBottom:6}}>Bookkeeping</h1>
+        <h2 style={{color:"#64c8ff",fontSize:"clamp(16px,3vw,22px)",fontWeight:"normal",fontStyle:"italic",marginBottom:20}}>Do's & Don'ts</h2>
+        <div style={{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:16,padding:"18px 22px",marginBottom:18,textAlign:"left"}}>
+          <p style={{color:"rgba(255,255,255,0.7)",fontSize:15,lineHeight:1.8,marginBottom:14}}>You'll see a <strong style={{color:"#fff"}}>business type</strong> and an <strong style={{color:"#fff"}}>expense</strong>. Decide:</p>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+            <div style={{background:"rgba(0,217,126,0.1)",border:"1px solid rgba(0,217,126,0.25)",borderRadius:10,padding:"12px",textAlign:"center"}}>
+              <div style={{fontSize:26,marginBottom:4}}>✅</div>
+              <div style={{color:"#00d97e",fontWeight:"bold",marginBottom:2}}>GOOD</div>
+              <div style={{color:"rgba(255,255,255,0.5)",fontSize:11}}>Legit business expense</div>
+            </div>
+            <div style={{background:"rgba(231,76,60,0.1)",border:"1px solid rgba(231,76,60,0.25)",borderRadius:10,padding:"12px",textAlign:"center"}}>
+              <div style={{fontSize:26,marginBottom:4}}>🚩</div>
+              <div style={{color:"#e74c3c",fontWeight:"bold",marginBottom:2}}>BAD</div>
+              <div style={{color:"rgba(255,255,255,0.5)",fontSize:11}}>Personal / CRA red flag</div>
+            </div>
+          </div>
+          <div style={{display:"flex",flexWrap:"wrap",gap:6,marginTop:10}}>
+            {["💇‍♀️ Salon","🍽️ Restaurant","🛍️ Boutique","🏠 Home Office","🔨 Contractor","📊 Bookkeeper"].map(b=>(
+              <span key={b} style={{background:"rgba(100,200,255,0.08)",border:"1px solid rgba(100,200,255,0.15)",color:"rgba(255,255,255,0.6)",padding:"4px 10px",borderRadius:16,fontSize:11}}>{b}</span>
+            ))}
+          </div>
+        </div>
+        <div style={{display:"flex",gap:10,marginBottom:22}}>
+          <div style={{flex:1,background:"rgba(231,76,60,0.08)",border:"1px solid rgba(231,76,60,0.18)",borderRadius:12,padding:"10px",textAlign:"center"}}>
+            <div style={{fontSize:20,marginBottom:3}}>❤️❤️❤️</div>
+            <div style={{color:"rgba(255,255,255,0.5)",fontSize:11}}>3 lives — wrong = lose one</div>
+          </div>
+          <div style={{flex:1,background:"rgba(245,166,35,0.08)",border:"1px solid rgba(245,166,35,0.18)",borderRadius:12,padding:"10px",textAlign:"center"}}>
+            <div style={{fontSize:20,marginBottom:3}}>⏸️ ⏱</div>
+            <div style={{color:"rgba(255,255,255,0.5)",fontSize:11}}>Pause or turn off timer</div>
+          </div>
+        </div>
+        <button onClick={()=>setScreen("game")} style={{background:"linear-gradient(135deg,#64c8ff,#a78bfa)",color:"#fff",padding:"16px 52px",fontSize:18,borderRadius:50,fontWeight:"bold",boxShadow:"0 4px 24px rgba(100,200,255,0.35)"}}>
+          Let's Play! →
+        </button>
+      </div>
+    </div>
+  );
+
+  if(screen==="result")return(
+    <div className="fade" style={{minHeight:"100vh",background:"linear-gradient(150deg,#0f0c29,#302b63,#1a0f3c)",display:"flex",alignItems:"center",justifyContent:"center",padding:24,overflowY:"auto"}}>
+      <div style={{maxWidth:560,width:"100%",textAlign:"center",paddingBottom:40}}>
+        <img src={LOGO} alt="SKC" style={{width:80,marginBottom:12,filter:"drop-shadow(0 4px 12px rgba(100,200,255,0.3))"}}/> 
+        <div style={{fontSize:48,marginBottom:8}}>{pct>=80?"🏆":pct>=50?"📈":"📚"}</div>
+        <h2 style={{color:"#fff",fontSize:24,marginBottom:6}}>{pct>=80?"Bookkeeping Pro!":pct>=50?"Getting There!":"Keep Studying!"}</h2>
+        <p style={{color:"rgba(255,255,255,0.4)",marginBottom:20,fontSize:13}}>{score} out of {questions.length} correct</p>
+        <div style={{width:100,height:100,borderRadius:"50%",background:`conic-gradient(${pct>=80?"#00d97e":pct>=50?"#f5a623":"#e74c3c"} ${pct*3.6}deg,rgba(255,255,255,0.07) 0deg)`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 22px"}}>
+          <div style={{width:74,height:74,borderRadius:"50%",background:"#1a1040",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
+            <span style={{color:"#fff",fontSize:20,fontWeight:"bold"}}>{score}/{questions.length}</span>
+            <span style={{color:"rgba(255,255,255,0.3)",fontSize:10}}>{pct}%</span>
+          </div>
+        </div>
+        <div style={{textAlign:"left",marginBottom:22,display:"flex",flexDirection:"column",gap:7}}>
+          {log.map((r,i)=>(
+            <div key={i} style={{background:r.ok?"rgba(0,217,126,0.06)":"rgba(231,76,60,0.06)",border:`1px solid ${r.ok?"rgba(0,217,126,0.18)":"rgba(231,76,60,0.18)"}`,borderRadius:10,padding:"9px 13px"}}>
+              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:3}}>
+                <span style={{fontSize:14}}>{r.q.biz.split(" ")[0]}</span>
+                <span style={{color:"rgba(255,255,255,0.45)",fontSize:11,flex:1}}>{r.q.biz.split(" ").slice(1).join(" ")}</span>
+                <span style={{color:r.ok?"#00d97e":"#e74c3c",fontSize:12,fontWeight:"bold"}}>{r.ok?"✓ Correct":"✗ Wrong"}</span>
+              </div>
+              <div style={{color:"rgba(255,255,255,0.7)",fontSize:12,marginBottom:r.ok?0:4}}>"{r.q.expense}"</div>
+              {!r.ok&&<div style={{color:"rgba(255,255,255,0.4)",fontSize:11,fontStyle:"italic"}}>{r.q.why}</div>}
+            </div>
+          ))}
+        </div>
+        <button onClick={restart} style={{background:"linear-gradient(135deg,#64c8ff,#a78bfa)",color:"#fff",padding:"14px 44px",fontSize:16,borderRadius:50,fontWeight:"bold",boxShadow:"0 4px 22px rgba(100,200,255,0.3)",marginBottom:12}}>
+          Play Again
+        </button>
+        <p style={{color:"rgba(255,255,255,0.2)",fontSize:11,marginTop:6}}>© SKC Bookkeeping Services Inc</p>
+      </div>
+    </div>
+  );
+
+  return(
+    <div style={{minHeight:"100vh",background:"linear-gradient(150deg,#0f0c29,#302b63,#1a0f3c)",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
+      {paused&&(
+        <div style={{position:"fixed",inset:0,zIndex:50,background:"rgba(0,0,0,0.88)",display:"flex",alignItems:"center",justifyContent:"center",backdropFilter:"blur(6px)"}}>
+          <div className="pop" style={{background:"linear-gradient(135deg,#1a1040,#0d1f3c)",border:"1px solid rgba(245,166,35,0.35)",borderRadius:20,padding:"36px 44px",textAlign:"center",maxWidth:320}}>
+            <div style={{fontSize:46,marginBottom:10}}>⏸️</div>
+            <h2 style={{color:"#f5a623",fontSize:22,marginBottom:8}}>Game Paused</h2>
+            <p style={{color:"rgba(255,255,255,0.5)",fontSize:13,marginBottom:24,lineHeight:1.6}}>Timer is stopped.<br/>Take your time!</p>
+            <button onClick={()=>setPaused(false)} style={{background:"linear-gradient(135deg,#64c8ff,#a78bfa)",color:"#fff",padding:"12px 36px",fontSize:15,borderRadius:50,fontWeight:"bold",marginBottom:10,display:"block",width:"100%"}}>
+              ▶ Resume
+            </button>
+            <button onClick={restart} style={{background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.12)",color:"rgba(255,255,255,0.4)",padding:"9px 24px",fontSize:12,borderRadius:50,display:"block",width:"100%"}}>
+              🔄 Restart
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className={`fade ${shake?"shake":""}`} style={{maxWidth:560,width:"100%"}}>
+        {/* Top bar */}
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+          <img src={LOGO} alt="SKC" style={{height:38,filter:"drop-shadow(0 2px 8px rgba(100,200,255,0.3))"}}/> 
+          <span style={{color:"rgba(255,255,255,0.35)",fontSize:13}}>{qi+1} / {questions.length}</span>
+          <span style={{fontSize:16}}>{hearts}</span>
+        </div>
+
+        {/* Timer bar + controls */}
+        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:14}}>
+          <div style={{flex:1,height:10,background:"rgba(255,255,255,0.08)",borderRadius:5,overflow:"hidden"}}>
+            <div style={{
+              height:"100%",
+              width: timerOn&&!paused&&choice===null ? `${(timeLeft/TIMER)*100}%` : "100%",
+              background: !timerOn?"rgba(255,255,255,0.15)" : paused?"#f5a623" : tc,
+              borderRadius:5,
+              transition:timerOn&&!paused&&choice===null?"width 1s linear, background 0.5s":"none",
+              animation:timerOn&&timeLeft<=5&&!paused&&choice===null?"blink 0.5s infinite":"none"
+            }}/>
+          </div>
+          {timerOn&&choice===null&&!paused&&<span style={{color:tc,fontSize:14,fontWeight:"bold",minWidth:26,animation:timeLeft<=5?"blink 0.5s infinite":"none"}}>{timeLeft}s</span>}
+          {choice===null&&(
+            <div style={{display:"flex",gap:6,flexShrink:0}}>
+              <button onClick={()=>setPaused(p=>!p)} style={{background:paused?"rgba(245,166,35,0.2)":"rgba(255,255,255,0.07)",border:`1px solid ${paused?"rgba(245,166,35,0.4)":"rgba(255,255,255,0.12)"}`,color:paused?"#f5a623":"rgba(255,255,255,0.5)",padding:"5px 11px",borderRadius:16,fontSize:12}}>
+                {paused?"▶":"⏸"}
+              </button>
+              <button onClick={()=>setTimerOn(t=>!t)} style={{background:timerOn?"rgba(255,255,255,0.07)":"rgba(100,200,255,0.15)",border:`1px solid ${timerOn?"rgba(255,255,255,0.12)":"rgba(100,200,255,0.3)"}`,color:timerOn?"rgba(255,255,255,0.5)":"#64c8ff",padding:"5px 11px",borderRadius:16,fontSize:12}}>
+                {timerOn?"⏱ ON":"⏱ OFF"}
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Business tag */}
+        <div style={{display:"inline-block",background:"rgba(100,200,255,0.1)",border:"1px solid rgba(100,200,255,0.22)",color:"#64c8ff",padding:"5px 16px",borderRadius:20,fontSize:13,marginBottom:12}}>{q.biz}</div>
+
+        {/* Expense card */}
+        <div style={{background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:18,padding:"22px 24px",marginBottom:18}}>
+          <p style={{color:"rgba(255,255,255,0.4)",fontSize:11,marginBottom:7,textTransform:"uppercase",letterSpacing:"0.06em"}}>Expense</p>
+          <p style={{color:"#fff",fontSize:"clamp(16px,2.5vw,21px)",lineHeight:1.5,fontWeight:"bold"}}>{q.expense}</p>
+        </div>
+
+        {/* Buttons */}
+        {choice===null?(
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:14}}>
+            <button onClick={()=>pick("good")} style={{background:"rgba(0,217,126,0.1)",border:"2px solid rgba(0,217,126,0.28)",color:"#00d97e",padding:"22px 10px",borderRadius:16,fontSize:17,fontWeight:"bold",lineHeight:1.5}}>
+              ✅ GOOD<br/><span style={{fontSize:11,fontWeight:"normal",opacity:0.65}}>Business Expense</span>
+            </button>
+            <button onClick={()=>pick("bad")} style={{background:"rgba(231,76,60,0.1)",border:"2px solid rgba(231,76,60,0.28)",color:"#e74c3c",padding:"22px 10px",borderRadius:16,fontSize:17,fontWeight:"bold",lineHeight:1.5}}>
+              🚩 BAD<br/><span style={{fontSize:11,fontWeight:"normal",opacity:0.65}}>Personal / Red Flag</span>
+            </button>
+          </div>
+        ):(
+          <div className="pop">
+            <div style={{background:choice==="timeout"?"rgba(245,166,35,0.13)":choice===q.correct?"rgba(0,217,126,0.13)":"rgba(231,76,60,0.13)",border:`2px solid ${choice==="timeout"?"#f5a623":choice===q.correct?"#00d97e":"#e74c3c"}`,borderRadius:14,padding:"16px 18px",marginBottom:12,textAlign:"center"}}>
+              <div style={{fontSize:30,marginBottom:5}}>{choice==="timeout"?"⏰":choice===q.correct?"✅":"🚩"}</div>
+              <div style={{color:choice==="timeout"?"#f5a623":choice===q.correct?"#00d97e":"#e74c3c",fontSize:15,fontWeight:"bold",marginBottom:6}}>
+                {choice==="timeout"?"Time's Up! It was a "+q.correct.toUpperCase()+" expense":choice===q.correct?"Correct! ✓ That's a "+q.correct.toUpperCase()+" expense":"Wrong! It's actually a "+q.correct.toUpperCase()+" expense"}
+              </div>
+              <div style={{color:"rgba(255,255,255,0.65)",fontSize:13,lineHeight:1.65}}>{q.why}</div>
+            </div>
+            <button onClick={next} style={{width:"100%",background:"linear-gradient(135deg,#64c8ff,#a78bfa)",color:"#fff",padding:"14px",fontSize:16,borderRadius:14,fontWeight:"bold"}}>
+              {qi+1>=questions.length?"See My Results →":"Next Expense →"}
+            </button>
+          </div>
+        )}
+
+        {/* Score strip */}
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:12,padding:"8px 14px",background:"rgba(255,255,255,0.04)",borderRadius:10}}>
+          <span style={{color:"rgba(255,255,255,0.3)",fontSize:12}}>Score</span>
+          <span style={{color:"#f5a623",fontWeight:"bold",fontSize:14}}>⭐ {score} correct</span>
+          <span style={{color:"rgba(255,255,255,0.3)",fontSize:12}}>{questions.length-qi-1} left</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
